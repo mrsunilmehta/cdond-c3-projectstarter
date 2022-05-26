@@ -1,5 +1,29 @@
 version: 2.1
+orbs: 
+  slack: circleci/slack@4.10.1
 jobs:
+  notify:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
+
   build:
     docker:
       - image: cimg/node:17.2.0 # the primary container, where your job's commands are run
@@ -103,7 +127,10 @@ jobs:
 
 workflows:
   default:
+  send-notification:
     jobs:
+      - notify:
+          context: slack-secrets
       - build-frontend
       - build-backend
       - test-frontend:
