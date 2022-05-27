@@ -266,11 +266,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apk add tar
-            sudo apk add gzip            
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: .circleci/ansible/inventory.txt    
+            apk add tar
+            apk add gzip            
       - run:
           name: Install PIP
           command: sudo apt-get install python-pip python-dev
@@ -285,7 +282,10 @@ jobs:
           command: sudo apk add nodejs   
       - run:
           name: Install npm
-          command: sudo apk add ansible                                 
+          command: sudo apk add ansible                 
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .circleci/ansible/inventory.txt    
                 
       - run:
           name: Get backend url
