@@ -272,9 +272,6 @@ jobs:
           name: Install npm
           command: apk add npm   
       - run:
-          name: Install pm2
-          command: apk add pm2   
-      - run:
           name: Install nodejs
           command: apk add nodejs   
       - run:
