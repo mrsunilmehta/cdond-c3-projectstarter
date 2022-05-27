@@ -153,8 +153,8 @@ jobs:
       - run:
           name: Install tar and gzip
           command: |
-          yum -y install tar
-          yum -y install gzip
+            yum -y install tar
+            yum -y install gzip
       - run:
           name: Ensure back-end infrastructure exists  
           #  npm install
