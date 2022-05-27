@@ -202,10 +202,10 @@ jobs:
           name: Install tar, gzip, ansible, or awscli
           command: |
             apk update
-            apk add tar gzip  ansible aws-cli
+            apk add tar gzip
             # install the dependencies needed for your playbook
-            # apk add --update ansible     
-            # apk add --no-cache aws-cli                        
+            apk add --update ansible     
+            apk add --no-cache aws-cli                        
       - run:
           name: Configure server
           command: |
