@@ -282,8 +282,8 @@ jobs:
           command: pip install awscli                               
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: .circleci/ansible/inventory.txt    
-                
+          at: ~/
+      - run: cat ~/ansible/inventory.txt 
       - run:
           name: Get backend url
           command: |
