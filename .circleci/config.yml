@@ -283,7 +283,6 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: /tmp/ansible
-      - run: cat ~/inventory.txt 
       - run:
           name: Get backend url
           command: |
