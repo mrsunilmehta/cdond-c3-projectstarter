@@ -194,7 +194,7 @@ jobs:
             - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"    
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: ~/project/.circleci/ansible/inventory.txt             
+          at: /project/.circleci/ansible/inventory.txt             
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
@@ -207,16 +207,13 @@ jobs:
             apk add --update ansible     
             apk add --no-cache aws-cli                        
       - run:
-          name: Install dependencies
-          command: |
-            # Your code here
-            exit 1
-      - run:
           name: Configure server
           command: |
-            # Your code here
-            exit 1
-      # Here's where you will add some code to rollback on failure   
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+       # Here's where you will add some code to rollback on failure   
+      - destroy-environment  
+
 
 workflows:
   default:
