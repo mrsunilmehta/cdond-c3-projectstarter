@@ -310,8 +310,8 @@ workflows:
   default:
     jobs:
       #- notify
-      #- build-frontend
-      #- build-backend
+      - build-frontend
+      - build-backend
       #- run-migrations      
       - deploy-frontend      
       - test-frontend:
