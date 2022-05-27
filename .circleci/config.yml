@@ -157,7 +157,7 @@ jobs:
       #      npm i tar install
       #      npm i gzip install         
       - run:
-          name: Ensure back-end infrastructure exists
+          name: Ensure back-end infrastructure exists  
           #  npm install
           command: |
             aws cloudformation deploy \
