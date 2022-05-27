@@ -270,22 +270,22 @@ jobs:
             apk add gzip            
       - run:
           name: Install PIP
-          command: sudo apt-get install python-pip python-dev
+          command: apt-get install python-pip python-dev
       - run:
           name: Install npm
-          command: sudo apk add npm   
+          command: apk add npm   
       - run:
-          name: Install npm
-          command: sudo apk add pm2   
+          name: Install pm2
+          command: apk add pm2   
       - run:
-          name: Install npm
-          command: sudo apk add nodejs   
+          name: Install nodejs
+          command: apk add nodejs   
       - run:
-          name: Install npm
-          command: sudo apk add ansible   
+          name: Install ansible
+          command: apk add ansible   
       - run:          
           name: Install awscli
-          command: sudo pip install awscli                               
+          command: pip install awscli                               
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: .circleci/ansible/inventory.txt    
