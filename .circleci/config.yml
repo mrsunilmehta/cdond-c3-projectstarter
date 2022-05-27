@@ -296,7 +296,6 @@ jobs:
           name: Deploy frontend objects
           working_directory: ./frontend
           command: |
-            cd frontend
             npm install oauth2
             npm install webpack
             npm audit fix --audit-level=critical --force            
