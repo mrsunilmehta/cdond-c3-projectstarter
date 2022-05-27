@@ -190,8 +190,8 @@ workflows:
   default:
     jobs:
       #- notify
-      #- build-frontend
-      #- build-backend
+      - build-frontend
+      - build-backend
       - deploy-infrastructure
       - test-frontend:
           requires: [build-frontend]  
