@@ -269,9 +269,6 @@ jobs:
             apk add tar
             apk add gzip            
       - run:
-          name: Install PIP
-          command: apt-get install python-pip python-dev
-      - run:
           name: Install npm
           command: apk add npm   
       - run:
