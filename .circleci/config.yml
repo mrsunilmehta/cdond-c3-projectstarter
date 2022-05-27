@@ -176,15 +176,47 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             # Run this in your exercise directory
-            touch inventory
-            echo [all] > /.circleci/ansible/inventory.txt          
-            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=!Sub backend-${ID}" --output text >> /.circleci/ansible/inventory.txt
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=!Sub backend-${ID}" --output text >> .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
       - destroy-environment      
+
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"    
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/project/.circleci/ansible/inventory.txt             
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - run:
+          name: Install tar, gzip, ansible, or awscli
+          command: |
+            yum -y install tar
+            yum -y install gzip  
+            # install the dependencies needed for your playbook
+            apk add --update ansible     
+            apk add --no-cache aws-cli                        
+      - run:
+          name: Install dependencies
+          command: |
+            # Your code here
+            exit 1
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            exit 1
+      # Here's where you will add some code to rollback on failure   
 
 workflows:
   default:
