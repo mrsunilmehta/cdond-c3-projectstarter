@@ -269,7 +269,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            sudo apk add tar
+            sudo apk add gzip
       - run:
           name: Install PIP
           command: sudo apt-get install python-pip python-dev
