@@ -221,10 +221,6 @@ jobs:
 workflows:
   default:
     jobs:
-      #- notify
-      - build-frontend
-      - build-backend
-      - deploy-infrastructure
       - configure-infrastructure
       - test-frontend:
           requires: [build-frontend]  
