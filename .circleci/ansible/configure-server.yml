@@ -20,12 +20,18 @@
 
     - name: "install python for Ansible."
       command: |    
-        yum -y install python
-        yum -y install npm
-        yum -y install pm2
-        yum -y install nodejs
+        apk add python
+        apk add npm
+        apk add pm2
+        apk add nodejs
         apk add --update ansible     
-        apk add --no-cache aws-cli   
+            apk add --no-cache \
+                python3 \
+                py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install \
+                awscli \
+            && rm -rf /var/cache/apk/* 
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:

@@ -194,7 +194,7 @@ jobs:
             - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"    
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /project/.circleci/ansible/inventory.txt             
+          at: ~/project/.circleci/ansible/inventory.txt             
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
@@ -220,6 +220,30 @@ jobs:
        # Here's where you will add some code to rollback on failure   
       - destroy-environment  
 
+  run-migrations:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend]    
+      - run:
+          name: Run migrations
+          command: |
+            cd backend
+            npm install
+            # Run and save the migration output
+            npm run migrations > migrations_dump.txt
+      - run:
+          name: Send migration results to memstash
+          command: |
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then
+                # If you are using kvdb.io, generate the bucket ID "KowCL4nc2VzGLmD5hiXv8P" in your local terminal first
+                curl https://kvdb.io/KowCL4nc2VzGLmD5hiXv8P/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'                
+            fi
+     # Here's where you will add some code to rollback on failure  
+      - destroy-environment       
 
 workflows:
   default:
