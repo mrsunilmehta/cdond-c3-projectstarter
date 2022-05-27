@@ -267,7 +267,15 @@ jobs:
           name: Install dependencies
           command: |
             apk add tar
-            apk add gzip            
+            apk add gzip  
+            apk install -y unzip   
+      - run:
+          name: Install dependencies
+          command: |
+            apt-get update && sudo apt-get install -yy less
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update                      
       - run:
           name: Install npm
           command: apk add npm   
@@ -287,13 +295,14 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            #export BACKEND_IP=${aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople"}
-            #export API_URL="http://${BACKEND_IP}:3030"
-            #echo "API_URL = ${API_URL}"   
-            echo API_URL >> frontend/.env
-            cat frontend/.env                     
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters Name=instance-state-name,Values=udapeople --output text)
+            export API_URL="https://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="https://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env                   
       - run:
           name: Deploy frontend objects
+          working_directory: ./frontend
           command: |
             cd frontend
             curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
