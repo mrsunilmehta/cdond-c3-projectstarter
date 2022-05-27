@@ -205,7 +205,13 @@ jobs:
             apk add tar gzip
             # install the dependencies needed for your playbook
             apk add --update ansible     
-            apk add --no-cache aws-cli                        
+            apk add --no-cache \
+                python3 \
+                py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install \
+                awscli \
+            && rm -rf /var/cache/apk/*                      
       - run:
           name: Configure server
           command: |
@@ -221,6 +227,7 @@ workflows:
       #- notify
       - build-frontend
       - build-backend
+      - deploy-infrastructure      
       - configure-infrastructure
       - test-frontend:
           requires: [build-frontend]  
