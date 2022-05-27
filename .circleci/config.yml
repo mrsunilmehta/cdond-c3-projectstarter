@@ -263,14 +263,14 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"    
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: .circleci/ansible/inventory.txt    
       - run:
           name: Install dependencies
           command: |
             sudo apk add tar
-            sudo apk add gzip
+            sudo apk add gzip            
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .circleci/ansible/inventory.txt    
       - run:
           name: Install PIP
           command: sudo apt-get install python-pip python-dev
