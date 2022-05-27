@@ -255,6 +255,57 @@ jobs:
      # Here's where you will add some code to rollback on failure  
       - destroy-environment       
 
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"    
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: .circleci/ansible/inventory.txt    
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Install PIP
+          command: sudo apt-get install python-pip python-dev
+      - run:
+          name: Install npm
+          command: sudo apk add npm   
+      - run:
+          name: Install npm
+          command: sudo apk add pm2   
+      - run:
+          name: Install npm
+          command: sudo apk add nodejs   
+      - run:
+          name: Install npm
+          command: sudo apk add ansible                                 
+                
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            export BACKEND_IP=${aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=!Sub backend-${ID}"}
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"   
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env                     
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      # Here's where you will add some code to rollback on failure    
+      - destroy-environment        
+
 workflows:
   default:
     jobs:
