@@ -257,7 +257,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - add_ssh_keys:
@@ -282,7 +282,10 @@ jobs:
           command: sudo apk add nodejs   
       - run:
           name: Install npm
-          command: sudo apk add ansible                 
+          command: sudo apk add ansible   
+      - run:          
+          name: Install awscli
+          command: sudo pip install awscli                               
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: .circleci/ansible/inventory.txt    
