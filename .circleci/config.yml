@@ -194,7 +194,7 @@ jobs:
             - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"    
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: ~/project/.circleci/ansible/inventory.txt             
+          at: .circleci/ansible/inventory.txt             
       # Checkout code from git
       # Add ssh keys with fingerprint
       # attach workspace
@@ -211,7 +211,13 @@ jobs:
             && pip3 install --upgrade pip \
             && pip3 install \
                 awscli \
-            && rm -rf /var/cache/apk/*                      
+            && rm -rf /var/cache/apk/*     
+      - run:
+          name: Install PIP
+          command: sudo apt-get install python-pip python-dev
+      - run:
+          name: Install awscli
+          command: sudo pip install awscli                             
       - run:
           name: Configure server
           command: |
@@ -266,4 +272,6 @@ workflows:
             branches:
               only: [test-feature-branch]    
       - configure-infrastructure:
-          requires: [deploy-infrastructure]                    
+          requires: [deploy-infrastructure]    
+      - run-migrations:
+          requires: [configure-infrastructure]                          
