@@ -151,14 +151,14 @@ jobs:
       - checkout
       - restore_cache:
           keys: [frontend-build]
-      - run:
-          name: Install tar and gzip
-          command: |
-            npm i tar install
-            npm i gzip install         
+      #- run:
+      #    name: Install tar and gzip
+      #    command: |
+      #      npm i tar install
+      #      npm i gzip install         
       - run:
           name: Ensure back-end infrastructure exists
-            npm install
+          #  npm install
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
