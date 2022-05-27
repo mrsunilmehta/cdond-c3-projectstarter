@@ -154,8 +154,8 @@ jobs:
       - run:
           name: Install tar and gzip
           command: |
-            tar install
-            gzip install         
+            npm i tar install
+            npm i gzip install         
       - run:
           name: Ensure back-end infrastructure exists
             npm install
