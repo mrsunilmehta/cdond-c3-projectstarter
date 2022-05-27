@@ -267,15 +267,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add tar
-            apk add gzip  
-            apk install -y unzip   
-      - run:
-          name: Install dependencies
-          command: |
-            apt-get update && sudo apt-get install -yy less
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update                      
+            apk add gzip            
       - run:
           name: Install npm
           command: apk add npm   
@@ -305,9 +297,6 @@ jobs:
           working_directory: ./frontend
           command: |
             cd frontend
-            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
-            yum -y install nodejs
-            npm install -g npm
             npm install oauth2
             npm install webpack
             npm audit fix --audit-level=critical --force            
