@@ -298,9 +298,10 @@ jobs:
           command: |
             npm install oauth2
             npm install webpack
-            npm audit fix --audit-level=critical            
+            npm audit fix
             npm audit fix --audit-level=critical     
             npm audit fix --audit-level=high                            
+            npm install oauth-sign@^0.9.0
             npm audit --audit-level=critical                  
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
