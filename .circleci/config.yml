@@ -300,7 +300,7 @@ jobs:
             npm audit fix --audit-level=critical     
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-            aws s3 cp dist s3://udapeople-sunilmehta-project-3 --recursive
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       # Here's where you will add some code to rollback on failure    
       - destroy-environment        
 
@@ -310,8 +310,6 @@ workflows:
       #- notify
       - build-frontend
       - build-backend
-      #- run-migrations      
-      - deploy-frontend      
       - test-frontend:
           requires: [build-frontend]  
       - test-backend:
@@ -322,9 +320,6 @@ workflows:
           requires: [build-frontend]          
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]    
       - configure-infrastructure:
           requires: [deploy-infrastructure]    
       - run-migrations:
