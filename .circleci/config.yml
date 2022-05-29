@@ -214,7 +214,7 @@ jobs:
             && rm -rf /var/cache/apk/*     
       - run:
           name: Install awscli
-          command: sudo pip install awscli                             
+          command: pip install awscli                             
       - run:
           name: Configure server
           command: |
