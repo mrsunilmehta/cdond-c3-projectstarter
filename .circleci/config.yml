@@ -214,7 +214,7 @@ jobs:
             && rm -rf /var/cache/apk/*     
       - run:
           name: Install PIP
-          command: apt add python-pip python-dev
+          command: apk add python-pip python-dev
       - run:
           name: Install awscli
           command: sudo pip install awscli                             
