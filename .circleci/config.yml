@@ -19,6 +19,8 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.    
     steps:
+      - restore_cache:
+          keys: [backend]        
       - run:
           name: Revert migrations
           when: on_fail
@@ -27,7 +29,7 @@ commands:
             echo " success migration checking"
             if ((success_migrations== true));
             then
-              cd /tmp/backend
+              cd backend
               npm install
               npm run migrations:revert
             fi
