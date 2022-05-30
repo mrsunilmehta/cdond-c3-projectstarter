@@ -35,3 +35,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub backend-${ID}
+
+Outputs:
+  EC2IP:
+    Description: Public IP of EC2 instance creted
+    Value: !GetAtt EC2Instance.PublicIp          
