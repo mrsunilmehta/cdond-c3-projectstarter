@@ -423,6 +423,8 @@ jobs:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.    
+    docker:
+      - image: circleci/node:13.8.0    
     steps:
       - run:
           name: Revert migrations
