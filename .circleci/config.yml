@@ -462,7 +462,6 @@ jobs:
             --tags project=udapeople
  
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
 
   cleanup:
@@ -520,4 +519,4 @@ workflows:
       - cloudfront-update:
           requires: [smoke-test]
       - cleanup:
-          requires: [cloudfront-update]          
+          requires: [cloudfront-update]
