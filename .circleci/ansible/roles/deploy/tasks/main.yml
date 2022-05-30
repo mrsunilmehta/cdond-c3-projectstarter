@@ -1,89 +1,38 @@
 ---
-- name: "update apt packages."
-  become: yes
+- name: "upgrade packages."
+  become: true
   apt:
-    update_cache: yes
-
-- name: "upgrade packages"
-  become: yes
-  apt:
-    upgrade: yes
-
-- name: remove dependencies that are no longer required
-  become: yes
-  apt:
-    autoremove: yes
-
+    upgrade: "yes"
 - name: "install dependencies."
-  become: yes
+  become: true
   apt:
     name: ["nodejs", "npm"]
-    state: latest
     update_cache: yes
-
 - name: "install pm2"
-  become: yes
+  become: true
   npm:
     name: pm2
     global: yes
     production: yes
     state: present
-
-- name: Creates directory
-  file:
-    path: ~/web
-    state: directory
-
-- name: Copy index test page
-  template:
-    src: "files/index.js"
-    dest: "~/web/index.js"
-
-- name: Executing node
-  shell: |
-    pm2 start ~/web/index.js -f---
-- name: "update apt packages."
-  become: yes
-  apt:
-    update_cache: yes
-
-- name: "upgrade packages"
-  become: yes
-  apt:
-    upgrade: yes
-
-- name: remove dependencies that are no longer required
-  become: yes
-  apt:
-    autoremove: yes
-
-- name: "install dependencies."
-  become: yes
-  apt:
-    name: ["nodejs", "npm"]
-    state: latest
-    update_cache: yes
-
-- name: "install pm2"
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
-
-- name: Creates directory
-  file:
-    path: ~/web
-    state: directory
-
-- name: extract the zipped artifact
-  template:
-    src: "files/index.js"
-    dest: "~/web/index.js"
-
-- name: Executing node
-  shell: |
-    pm2 stop default
-    pm2 npm -- start
-    # pm2 start ~/web/index.js -f---
+- name: "copy backend file"
+  become: true
+  copy:
+    src: /root/project/backend
+    dest: /root
+    force: no
+- name: "install npm packages"
+  become: true
+  command: npm install
+  args:
+    chdir: /root/backend
+- name: "compile npm packages"
+  become: true
+  command: npm run build
+  args:
+    chdir: /root/backend
+- name: "start server"
+  become: true
+  command: pm2 start npm -- run start
+  args:
+    chdir: /root/backend/dist
