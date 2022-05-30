@@ -29,9 +29,9 @@ commands:
             echo " success migration checking"
             if ((success_migrations== true));
             then
-              #cd ~/project/backend
-              npm install
-              npm run migrations:revert
+              # cd ~/project/backend
+              # npm install
+              # npm run migrations:revert
             fi
 
 orbs: 
