@@ -419,21 +419,21 @@ jobs:
           name: Get backend url and backend smoke test
           command: |
             # Fetch and prepare the BACKEND_IP env var
-            BACKEND_IP=$(aws ec2 describe-instances \
-            --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text)
-            echo ${BACKEND_IP}             
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
-            if curl "${API_URL}/api/status" | grep "ok"
-            then
-              echo "Success backend test"
-              return 0
-            else
-              echo "Unsuccess backend test"
-              return 1
-            fi             
+            #BACKEND_IP=$(aws ec2 describe-instances \
+            #--filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            #--query 'Reservations[*].Instances[*].PublicIpAddress' \
+            #--output text)
+            #echo ${BACKEND_IP}             
+            3export API_URL="http://${BACKEND_IP}:3030"
+            #echo "${API_URL}"
+            #if curl "${API_URL}/api/status" | grep "ok"
+            #then
+            #  echo "Success backend test"
+            #  return 0
+            #else
+            #  echo "Unsuccess backend test"
+            #  return 1
+            #fi             
       # Here's where you will add some code to rollback on failure 
       - destroy-environment
       - revert-migrations      
