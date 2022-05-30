@@ -174,7 +174,7 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
 
       - run:
-          name: Add url to memstash
+          name: Add url to kvdb
           command: |
             WEBSITEURL=$(aws cloudformation describe-stacks \
               --region us-east-1 \
@@ -185,7 +185,7 @@ jobs:
             echo ${WEBSITEURL}
             
             curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID:0:7}" \
-            --request PUT --data "${WEBSITEURL}" https://api.memstash.io/values/websiteurl             
+            --request PUT --data "${WEBSITEURL}" https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/             
                     
       - run:
           name: Add back-end ip to ansible inventory
@@ -200,7 +200,7 @@ jobs:
             echo ${BACKEND_IP}
             
             curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID:0:7}" \
-            --request PUT --data "${BACKEND_IP}" https://api.memstash.io/values/backend_ip
+            --request PUT --data "${BACKEND_IP}" https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -243,7 +243,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            BACKEND_IP=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://api.memstash.io/values/backend_ip)
+            BACKEND_IP=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/backend_ip)
             cd .circleci/ansible/
             export ANSIBLE_HOST_KEY_CHECKING=False
             echo ${BACKEND_IP}
