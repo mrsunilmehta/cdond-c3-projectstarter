@@ -16,6 +16,24 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1            
 
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.    
+    docker:
+      - image: circleci/node:13.8.0    
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+            success_migration=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7}}
+            echo " success migration checking"
+            if ((success_migrations== true));
+            then
+              cd ~/project/backend
+              npm install
+              npm run migrations:revert
+            fi
+
 orbs: 
   slack: circleci/slack@4.10.1
 jobs:
@@ -420,24 +438,6 @@ jobs:
             fi            
       # Here's where you will add some code to rollback on failure 
       - destroy-environment
-
-  revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.    
-    docker:
-      - image: circleci/node:13.8.0    
-    steps:
-      - run:
-          name: Revert migrations
-          when: on_fail
-          command: |
-            success_migration=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7}}
-            echo " success migration checking"
-            if ((success_migrations== true));
-            then
-              cd ~/project/backend
-              npm install
-              npm run migrations:revert
-            fi
 
   cloudfront-update:
     docker:
