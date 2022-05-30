@@ -27,12 +27,12 @@ commands:
           command: |
             success_migration=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7})
             echo " success migration checking"
-            if ((success_migrations== true));
-            then
+            #if ((success_migrations== true));
+            #then
               # cd ~/project/backend
               # npm install
               # npm run migrations:revert
-            fi
+            #fi
 
 orbs: 
   slack: circleci/slack@4.10.1
