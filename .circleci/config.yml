@@ -23,7 +23,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            success_migration=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7}}
+            success_migration=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7})
             echo " success migration checking"
             if ((success_migrations== true));
             then
