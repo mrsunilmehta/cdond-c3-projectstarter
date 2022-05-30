@@ -401,7 +401,7 @@ jobs:
             apk add --update tar gzip ansible nodejs npm
             pip install awscli
       - run:
-          name: Get backend url
+          name: Get backend url and backend smoke test
           command: |
             # Fetch and prepare the BACKEND_IP env var
             BACKEND_IP=$(aws ec2 describe-instances \
@@ -411,9 +411,6 @@ jobs:
             echo ${BACKEND_IP}             
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-      - run:
-          name: Backend smoke test.
-          command: |
             if curl "${API_URL}/api/status" | grep "ok"
             then
               echo "Success backend test"
@@ -421,7 +418,7 @@ jobs:
             else
               echo "Unsuccess backend test"
               return 1
-            fi
+            fi            
       - run:
           name: Frontend smoke test.
           command: |
