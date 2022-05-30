@@ -27,7 +27,7 @@ commands:
             echo " success migration checking"
             if ((success_migrations== true));
             then
-              cd ~/project/backend
+              cd /tmp/backend
               npm install
               npm run migrations:revert
             fi
