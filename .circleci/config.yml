@@ -418,7 +418,7 @@ jobs:
       - run:
           name: Get backend url and backend smoke test
           command: |
-            # Fetch and prepare the BACKEND_IP env var
+            # Fetch and prepare the BACKEND_IP env var   
             BACKEND_IP=$(aws ec2 describe-instances \
             --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
