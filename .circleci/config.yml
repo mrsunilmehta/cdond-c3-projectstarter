@@ -426,7 +426,9 @@ jobs:
             echo ${BACKEND_IP}             
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            if curl "${API_URL}/api/status" | grep "ok"
+            echo "http://{BACKEND_IP}:3030/api/status"
+            echo "http://${BACKEND_IP}:3030/api/status"
+            if curl -s "http://${BACKEND_IP}:3030/api/status" | grep "ok"
             then
               echo "Success backend test"
               return 0
