@@ -1,39 +1,89 @@
----
-- name: "create app directory"
+- name: "upgrade packages."
+  become: true
+  apt:
+    upgrade: "yes"
+
+- name: "install dependencies."
+  become: true
+  apt:
+    name: ["nodejs", "npm"]
+    update_cache: yes
+
+- name: "Add nodejs apt key"
+  become: true
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: "Add nodejs 13.x ppa for apt repo"
+  become: true
+  apt_repository:
+    repo: deb https://deb.nodesource.com/node_13.x bionic main
+    update_cache: yes
+
+- name: "Install nodejs"
+  become: true
+  apt:
+    update_cache: yes
+    name: nodejs
+    state: present
+
+- name: Download zsh installer
+  get_url:
+    url: https://deb.nodesource.com/setup_13.x
+    dest: /tmp/setup_13.sh
+
+- name: Execute the setup_13.sh
+  become: true
+  become_user: root
+  shell: chmod 777 setup_13.sh & bash setup_13.sh
+  args:
+    chdir: /tmp/
+
+- name: "upgrade"
+  become: true
+  command: apt-get install -y nodejs
+  args:
+    chdir: /root
+
+- name: "install pm2"
+  become: true
+  npm:
+    name: pm2
+    path: /home/ubuntu/npm
+    global: yes
+    production: yes
+    state: present
+
+- name: Creates directory
   file:
     path: /home/ubuntu/backend
     state: directory
-   
-#- name: Copy backend files to remote server
-#  copy:
-#    src: /root/project/backend
-#    dest: /home/ubuntu
+    mode: 0755
 
-- name: "unarchive backend files"
-  unarchive:
-    src: api.tar.gz
-    dest: /home/ubuntu/backend/
+- name: Copy backend dist files web server
+  ansible.builtin.unarchive:
+    src: artifact.tar.gz
+    dest: /home/ubuntu/backend
 
-#- name: Install Node modules
-#  shell: |
-#    cd /home/ubuntu/backend
-#    ls -la
-#    printenv
-#    npm install
-#- name: building node services
-#  shell: |
-#    cd /home/ubuntu/backend
-#    npm run build
-#    npm run prestart:prod
-
-#- name: "run migrations"
-#  shell: |
-#    cd /home/ubuntu/backend
-#    npm run migrations
-    
-- name: Executing node
-  become: true
+- name: Uncompress Backend
   shell: |
-    cd /home/ubuntu/backend 
-    pm2 start npm --name 'udapeople' -- start
-    pm2 ls
+    cd /home/ubuntu/
+    tar xvzf artifact.tar.gz -C .
+    ls -la
+- name: Install Node
+  shell: |
+    cd /home/ubuntu/backend
+    npm install
+    npm install --only=dev
+- name: Build package
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+    cat .env
+    npm run prestart:prod
+- name: Start PM2
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 stop default
+    pm2 start npm --name backend -- run start
