@@ -14,25 +14,28 @@ commands:
             echo "Destroying environment for workflow id : ${CIRCLE_WORKFLOW_ID:0:7} "
             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
-            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1            
-
+            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1  
+            
+            
   revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.    
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here 
+      workflow_id:
+          type: string
     steps:
-      - restore_cache:
-          keys: [backend]        
       - run:
           name: Revert migrations
+          # Add when this will run
           when: on_fail
           command: |
-            success_migration=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7})
-            echo " success migration checking"
-            #if ((success_migrations== true));
-            #then
-              # cd ~/project/backend
-              # npm install
-              # npm run migrations:revert
-            #fi
+            SUCCESS=$(curl --insecure  https://kvdb.io/RjGyoa4CD28AApcpH4SgJT/migration_<< parameters.workflow_id >>)
+            if(( $SUCCESS==1 ));
+            then
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+            fi
 
 orbs: 
   slack: circleci/slack@4.10.1
@@ -272,34 +275,87 @@ jobs:
        # Here's where you will add some code to rollback on failure   
       - destroy-environment  
 
+# run-migrations:
+ #   docker:
+  #    - image: circleci/node:13.8.0
+   # steps:
+    #  - checkout
+     # - restore_cache:
+      #    keys: [backend]    
+      #- run:
+      #    name: Run migrations
+      #    command: |
+      #      cd backend
+      #      npm install
+            # Run and save the migration output
+       #     npm run migrations > migrations_dump.txt
+   #   - run:
+   #       name: Send migration results to kvdb
+   #       command: |
+   #         if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+   #         then
+                # If you are using kvdb.io, generate the bucket ID "GV8aqQ9ituUoCqcQp41Kxo" in your local terminal first
+   #             curl https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'                
+   #         fi
+   #         if curl --insure https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7} == 1
+    #        then
+   #           echo " key stored successfully"                
+   #         fi
+     # Here's where you will add some code to rollback on failure  
+    #  - destroy-environment       
+
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:16.13.1
+    resource_class: medium
     steps:
       - checkout
       - restore_cache:
-          keys: [backend]    
+          keys:
+            - backend-build
+      - run:
+          name: Install nvm
+          command: |
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - run:
           name: Run migrations
           command: |
-            cd backend
+            #echo NODE_ENV=production >> ~/project/backend/.env
+            echo "TYPEORM_CONNECTION = ${TYPEORM_CONNECTION}" >> ~/project/backend/.env
+            echo "TYPEORM_ENTITIES = ${TYPEORM_ENTITIES}" >> ~/project/backend/.env
+            echo "TYPEORM_HOST = ${TYPEORM_HOST}" >> ~/project/backend/.env
+            echo "TYPEORM_PORT = ${TYPEORM_PORT}" >> ~/project/backend/.env
+            echo "TYPEORM_USERNAME = ${TYPEORM_USERNAME}" >> ~/project/backend/.env
+            echo "TYPEORM_PASSWORD = ${TYPEORM_PASSWORD}" >> ~/project/backend/.env
+            echo "TYPEORM_DATABASE = ${TYPEORM_DATABASE}" >> ~/project/backend/.env
+            echo "TYPEORM_MIGRATIONS = ${TYPEORM_MIGRATIONS}" >> ~/project/backend/.env
+            echo "TYPEORM_MIGRATIONS_DIR = ${TYPEORM_MIGRATIONS_DIR}" >> ~/project/backend/.env
+            cd ~/project/backend
+            source ~/.profile
+            nvm install v13.8.0
             npm install
-            # Run and save the migration output
             npm run migrations > migrations_dump.txt
       - run:
-          name: Send migration results to kvdb
+          # It seems like memstash.io is no longer available/accessible (?)
+          name: Report migration results
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-                # If you are using kvdb.io, generate the bucket ID "GV8aqQ9ituUoCqcQp41Kxo" in your local terminal first
-                curl https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'                
+              echo "Migration succeeded for ${CIRCLE_WORKFLOW_ID:0:7}"
+              echo "1" >> ~/project/backend/migration-results.txt
+            else
+              echo "Migration failed for ${CIRCLE_WORKFLOW_ID:0:7}:"
+              cat ~/project/backend/migrations_dump.txt
+              echo "fail" >> ~/project/backend/migration-results.txt
             fi
-            if curl --insure https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_${CIRCLE_WORKFLOW_ID:0:7} == 1
-            then
-              echo " key stored successfully"                
-            fi
-     # Here's where you will add some code to rollback on failure  
-      - destroy-environment       
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/backend/migration-results.txt
+      - destroy-environment:
+      - revert-migrations:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+
 
   deploy-frontend:
     docker:
