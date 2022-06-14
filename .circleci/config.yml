@@ -29,7 +29,7 @@ commands:
           # Add when this will run
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/RjGyoa4CD28AApcpH4SgJT/migration_<< parameters.workflow_id >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/migration_<< parameters.workflow_id >>)
             if(( $SUCCESS==1 ));
             then
                 cd ~/project/backend
@@ -278,7 +278,6 @@ jobs:
   run-migrations:
     docker:
       - image: cimg/node:16.13.1
-    resource_class: medium
     steps:
       - checkout
       - restore_cache:
@@ -305,24 +304,24 @@ jobs:
             source ~/.profile
             nvm install v13.8.0
             npm install
-            npm run migrations > migrations_dump.txt
+            npm run migrations > migrations_file.txt
       - run:
           # It seems like memstash.io is no longer available/accessible (?)
           name: Report migration results
           command: |
-            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            if grep -q "has been executed successfully." ~/project/backend/migrations_file.txt
             then
               echo "Migration succeeded for ${CIRCLE_WORKFLOW_ID:0:7}"
-              echo "1" >> ~/project/backend/migration-results.txt
+              echo "1" >> ~/project/backend/migration-result.txt
             else
               echo "Migration failed for ${CIRCLE_WORKFLOW_ID:0:7}:"
-              cat ~/project/backend/migrations_dump.txt
-              echo "fail" >> ~/project/backend/migration-results.txt
+              cat ~/project/backend/migrations_file.txt
+              echo "fail" >> ~/project/backend/migration-result.txt
             fi
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/backend/migration-results.txt
+            - project/backend/migration-result.txt
       # Here's where you will add some code to rollback on failure    
       - destroy-environment    
       - revert-migrations:
