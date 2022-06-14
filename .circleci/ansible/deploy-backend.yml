@@ -9,14 +9,19 @@
     - ansible_stdout_callback: yaml
 
   environment:
-    ENVIRONMENT: production
-    TYPEORM_CONNECTION: postgres
-    TYPEORM_ENTITIES: ./src/modules/domain/**/*.entity.ts
-    TYPEORM_HOST: "{{ lookup('env','TYPEORM_HOST') }}"
-    TYPEORM_PORT: "{{ lookup('env','TYPEORM_PORT') }}"
-    TYPEORM_USERNAME: "{{ lookup('env','TYPEORM_USERNAME') }}"
-    TYPEORM_PASSWORD: "{{ lookup('env','TYPEORM_PASSWORD') }}"
-    TYPEORM_DATABASE: "{{ lookup('env','TYPEORM_DATABASE') }}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'AWS_ACCESS_KEY_ID')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'AWS_DEFAULT_REGION')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_HOST')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_PORT')}}"
+    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
+
 
   pre_tasks:
     - name: "wait 600 seconds for target connection to become reachable/usable."
