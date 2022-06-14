@@ -11,9 +11,8 @@ commands:
           # ${CIRCLE_WORKFLOW_ID} is a Built-in environment variable 
           # ${CIRCLE_WORKFLOW_ID:0:5} takes the first 7 chars of the variable CIRCLE_CI_WORKFLOW_ID 
           command: |
-            echo "Destroying environment for workflow id : ${CIRCLE_WORKFLOW_ID:0:7} "
+            echo "Destroying environment for workflow id : ${CIRCLE_WORKFLOW_ID:0:7}  aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1"
             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
-          # aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
             aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1  
             
             
