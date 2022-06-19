@@ -381,12 +381,9 @@ jobs:
     docker:
       - image: python:3.7-alpine3.11
     steps:
-      # Checkout code from git
-      # Add ssh keys with fingerprint
-      # attach workspace
       - checkout
       - add_ssh_keys:
-            fingerprints: ["9c:ce:2d:66:3f:14:cf:84:71:6b:e3:d6:c1:33:38:33"]
+            fingerprints: ["c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"]
       - attach_workspace:
             at: ~/
       - run:
@@ -417,7 +414,6 @@ jobs:
       - run:
           name: Env File
           command: |
-              # echo NODE_ENV=production >> backend/.env
               echo VERSION=1 >> backend/.env
               echo TYPEORM_CONNECTION=postgres >> backend/.env
               echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> backend/.env
