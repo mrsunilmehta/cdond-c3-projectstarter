@@ -66,13 +66,6 @@
     src: artifact.tar.gz
     dest: /home/ubuntu/backend
 
-- name: "copy backend file"
-  become: true
-  copy:
-    src: /root/project/backend
-    dest: /root
-    force: no
-
 - name: Uncompress Backend
   shell: |
     cd /home/ubuntu/
