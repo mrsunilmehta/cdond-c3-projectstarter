@@ -1,104 +1,89 @@
-- name: "upgrade packages."
-  become: true
+---
+- name: "update apt packages."
+  become: yes
   apt:
-    upgrade: "yes"
+    update_cache: yes
+
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: remove dependencies that are no longer required
+  become: yes
+  apt:
+    autoremove: yes
 
 - name: "install dependencies."
-  become: true
+  become: yes
   apt:
     name: ["nodejs", "npm"]
+    state: latest
     update_cache: yes
-
-- name: "Add nodejs apt key"
-  become: true
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
-
-- name: "Add nodejs 13.x ppa for apt repo"
-  become: true
-  apt_repository:
-    repo: deb https://deb.nodesource.com/node_13.x bionic main
-    update_cache: yes
-
-- name: "Install nodejs"
-  become: true
-  apt:
-    update_cache: yes
-    name: nodejs
-    state: present
-
-- name: Download zsh installer
-  get_url:
-    url: https://deb.nodesource.com/setup_13.x
-    dest: /tmp/setup_13.sh
-
-- name: Execute the setup_13.sh
-  become: true
-  become_user: root
-  shell: chmod 777 setup_13.sh & bash setup_13.sh
-  args:
-    chdir: /tmp/
-
-- name: "upgrade"
-  become: true
-  command: apt-get install -y nodejs
-  args:
-    chdir: /root
 
 - name: "install pm2"
-  become: true
+  become: yes
   npm:
     name: pm2
-    path: /home/ubuntu/npm
     global: yes
     production: yes
     state: present
 
 - name: Creates directory
   file:
-    path: /home/ubuntu/backend
+    path: ~/web
     state: directory
-    mode: 0755
 
-- name: Copy backend dist files web server
-  ansible.builtin.unarchive:
-    src: artifact.tar.gz
-    dest: /home/ubuntu/backend
+- name: Copy index test page
+  template:
+    src: "files/index.js"
+    dest: "~/web/index.js"
 
-- name: "copy backend file"
-  become: true
-  copy:
-    src: /root/project/backend
-    dest: /root
-    force: no
-
-- name: Uncompress Backend
+- name: Executing node
   shell: |
-    cd /home/ubuntu/
-    tar xvzf artifact.tar.gz -C .
-    ls -la
+    pm2 start ~/web/index.js -f---
+- name: "update apt packages."
+  become: yes
+  apt:
+    update_cache: yes
 
-- name: Install Node
-  shell: |
-    cd /home/ubuntu/backend
-    npm install
-    npm install --only=dev
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
 
-- name: Build package
-  shell: |
-    cd /home/ubuntu/backend
-    npm run build
-    cat .env
-    npm run prestart:prod
+- name: remove dependencies that are no longer required
+  become: yes
+  apt:
+    autoremove: yes
 
-- name: Start PM2
+- name: "install dependencies."
+  become: yes
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes
+
+- name: "install pm2"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
+
+- name: Creates directory
+  file:
+    path: ~/web
+    state: directory
+
+- name: extract the zipped artifact
+  template:
+    src: "files/index.js"
+    dest: "~/web/index.js"
+
+- name: Executing node
   shell: |
-    cd /home/ubuntu/backend
     pm2 stop default
-    pm2 start npm --name backend -- run start
-
-- name: start pm2 for dist/main.js
-  shell: pm2 start main.js
-  args:
-    chdir: /home/ubuntu/backend/dist    
+    pm2 npm -- start
+    # pm2 start ~/web/index.js -f---
