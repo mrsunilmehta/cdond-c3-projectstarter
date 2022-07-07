@@ -234,7 +234,8 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"]
+          fingerprints:
+            - "b5:14:89:51:eb:6f:13:20:9d:9d:71:27:4b:1f:ec:76"
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -332,7 +333,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"
+            - "b5:14:89:51:eb:6f:13:20:9d:9d:71:27:4b:1f:ec:76"
       - run:
           name: Install dependencies
           command: |
@@ -381,7 +382,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "c9:b2:6e:f2:a9:3f:a3:0c:8c:24:83:f0:66:cb:0d:b1"
+            - "b5:14:89:51:eb:6f:13:20:9d:9d:71:27:4b:1f:ec:76"
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -490,7 +491,7 @@ jobs:
               echo "Unsuccess backend test"
               return 1
             fi
-      # Here's where you will add some code to rollback on failure test
+      # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
