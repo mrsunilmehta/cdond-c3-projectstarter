@@ -13,8 +13,8 @@ commands:
           command: |
             echo "Destroying environment for workflow id : ${CIRCLE_WORKFLOW_ID:0:7} "
             aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/ --recursive
-            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
-            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region ${AWS_DEFAULT_REGION}
+            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} --region ${AWS_DEFAULT_REGION}
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -196,7 +196,7 @@ jobs:
           name: Add url to kvdb
           command: |
             WEBSITEURL=$(aws cloudformation describe-stacks \
-              --region us-east-1 \
+              --region ${AWS_DEFAULT_REGION} \
               --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
               --query 'Stacks[0].Outputs[?'OutputKey'].OutputValue' \
               --output text)
@@ -210,7 +210,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             BACKEND_IP=$(aws cloudformation describe-stacks \
-              --region us-east-1 \
+              --region ${AWS_DEFAULT_REGION} \
               --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --query 'Stacks[0].Outputs[?'OutputKey'].OutputValue' \
               --output text >> .circleci/ansible/inventory.txt)
@@ -461,7 +461,7 @@ jobs:
           name: Frontend smoke test.
           command: |
             echo "Frontend smoke test"
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-${AWS_DEFAULT_REGION}.amazonaws.com/#/employees"
             echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
@@ -533,7 +533,7 @@ jobs:
             OldWorkflowID=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/workflowid)
             export OldWorkflowID="$OldWorkflowID"
             echo Old Workflow Id: "${OldWorkflowID}"
-            # export STACKS=($(aws cloudformation list-stacks --region us-east-1 --query "StackSummaries[*]|[?starts_with(StackName,'uda')].StackName" --stack-status-filter CREATE_COMPLETE)) 
+            # export STACKS=($(aws cloudformation list-stacks --region ${AWS_DEFAULT_REGION} --query "StackSummaries[*]|[?starts_with(StackName,'uda')].StackName" --stack-status-filter CREATE_COMPLETE)) 
             CurrentWorkflowID=${CIRCLE_WORKFLOW_ID}
 
       - run:
