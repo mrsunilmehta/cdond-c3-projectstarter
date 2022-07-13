@@ -234,7 +234,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["67:91:67:5f:d2:b2:16:2d:04:02:83:f9:00:b4:7c:5d"]
+          fingerprints: ["6e:45:f0:86:6e:0c:f0:51:dc:c4:be:9c:91:de:07:f3"]
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -331,7 +331,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["67:91:67:5f:d2:b2:16:2d:04:02:83:f9:00:b4:7c:5d"]
+          fingerprints: ["6e:45:f0:86:6e:0c:f0:51:dc:c4:be:9c:91:de:07:f3"]
       - run:
           name: Install dependencies
           command: |
@@ -379,7 +379,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["67:91:67:5f:d2:b2:16:2d:04:02:83:f9:00:b4:7c:5d"]
+          fingerprints: ["6e:45:f0:86:6e:0c:f0:51:dc:c4:be:9c:91:de:07:f3"]
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
