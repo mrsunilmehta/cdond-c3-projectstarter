@@ -289,7 +289,7 @@ jobs:
           name: Run migrations
           command: |
             #echo NODE_ENV=production >> ~/project/backend/.env
-            echo " Sunil"
+            echo " Sunil 1 "
             echo "TYPEORM_CONNECTION = ${TYPEORM_CONNECTION}" >> ~/project/backend/.env
             echo "TYPEORM_ENTITIES = ${TYPEORM_ENTITIES}" >> ~/project/backend/.env
             echo "TYPEORM_HOST = ${TYPEORM_HOST}" >> ~/project/backend/.env
@@ -303,11 +303,16 @@ jobs:
             source ~/.profile
             nvm install v13.8.0
             npm install
+            echo " Sunil 2 "            
+            npm audit fix --audit-level=critical --force            
+            npm audit --audit-level=critical            
+            echo " Sunil 3 "            
             npm run migrations > migrations_file.txt
       - run:
           # It seems like memstash.io is no longer available/accessible (?)
           name: Report migration results
           command: |
+            echo " Running migration "          
             if grep -q "has been executed successfully." ~/project/backend/migrations_file.txt
             then
               echo "Migration succeeded for ${CIRCLE_WORKFLOW_ID:0:7}"
