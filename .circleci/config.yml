@@ -286,8 +286,19 @@ jobs:
           command: |
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - run:
-          name: Install awscli
-          command: pip install awscli            
+          name: Install tar, gzip, ansible, or awscli
+          command: |
+            apk update
+            apk add tar gzip curl
+            # install the dependencies needed for your playbook
+            apk add --update ansible     
+            apk add --no-cache \
+                python3 \
+                py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install \
+                awscli \
+            && rm -rf /var/cache/apk/*        
       - run:
           name: Run migrations
           command: |
