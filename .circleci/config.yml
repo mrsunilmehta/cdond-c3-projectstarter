@@ -289,6 +289,7 @@ jobs:
           name: Run migrations
           command: |
             #echo NODE_ENV=production >> ~/project/backend/.env
+            echo " Sunil"
             echo "TYPEORM_CONNECTION = ${TYPEORM_CONNECTION}" >> ~/project/backend/.env
             echo "TYPEORM_ENTITIES = ${TYPEORM_ENTITIES}" >> ~/project/backend/.env
             echo "TYPEORM_HOST = ${TYPEORM_HOST}" >> ~/project/backend/.env
