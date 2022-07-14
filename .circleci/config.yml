@@ -289,6 +289,7 @@ jobs:
           name: Install tar, gzip, ansible, or awscli
           command: |
             apk update
+            apk pip install            
             apk add tar gzip curl
             # install the dependencies needed for your playbook
             apk add --update ansible     
