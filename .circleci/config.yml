@@ -301,9 +301,13 @@ jobs:
             echo "TYPEORM_MIGRATIONS_DIR = ${TYPEORM_MIGRATIONS_DIR}" >> ~/project/backend/.env
             cd ~/project/backend
             source ~/.profile
+            echo "Sunil 1"
             nvm install v13.8.0
+            echo "Sunil 2"
             npm install
+            echo "Sunil 3"
             npm run migrations > migrations_dump.txt
+            echo "Sunil 4"
       - run:
           # It seems like memstash.io is no longer available/accessible (?)
           name: Report migration results
