@@ -382,7 +382,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["6e:45:f0:86:6e:0c:f0:51:dc:c4:be:9c:91:de:07:f3"]
+          fingerprints: ["b7:ee:99:63:fe:52:a2:2b:4c:b9:52:1a:54:75:ba:ed:e1:39:02:8c"]
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -444,10 +444,10 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      # Here's where you will add some code to rollback on failure
-      # - destroy-environment
-      #- revert-migrations:
-      #    workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+       #Here's where you will add some code to rollback on failure
+      - destroy-environment
+      - revert-migrations:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
   smoke-test:
     docker:
