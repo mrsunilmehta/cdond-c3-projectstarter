@@ -286,6 +286,9 @@ jobs:
           command: |
             curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
       - run:
+          name: Install awscli
+          command: pip install awscli            
+      - run:
           name: Run migrations
           command: |
             #echo NODE_ENV=production >> ~/project/backend/.env
@@ -302,7 +305,7 @@ jobs:
             cd ~/project/backend
             source ~/.profile
             nvm install v13.8.0
-            npm install
+            npm install jsonschema@1.2.6
             echo " Sunil 2 "            
             npm audit fix --audit-level=critical --force            
             npm audit --audit-level=critical            
