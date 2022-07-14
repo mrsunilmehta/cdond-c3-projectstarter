@@ -276,6 +276,7 @@ jobs:
   run-migrations:
     docker:
       - image: cimg/node:16.13.1
+    resource_class: medium
     steps:
       - checkout
       - restore_cache:
@@ -289,7 +290,6 @@ jobs:
           name: Run migrations
           command: |
             #echo NODE_ENV=production >> ~/project/backend/.env
-            echo " Sunil 1 "
             echo "TYPEORM_CONNECTION = ${TYPEORM_CONNECTION}" >> ~/project/backend/.env
             echo "TYPEORM_ENTITIES = ${TYPEORM_ENTITIES}" >> ~/project/backend/.env
             echo "TYPEORM_HOST = ${TYPEORM_HOST}" >> ~/project/backend/.env
@@ -302,32 +302,25 @@ jobs:
             cd ~/project/backend
             source ~/.profile
             nvm install v13.8.0
-            npm install jsonschema@1.2.6
-            echo " Sunil 2 "            
-            npm audit fix --audit-level=critical --force            
-            npm audit --audit-level=critical            
-            echo " Sunil 3 "            
-            npm run migrations > migrations_file.txt
+            npm install
+            npm run migrations > migrations_dump.txt
       - run:
           # It seems like memstash.io is no longer available/accessible (?)
           name: Report migration results
           command: |
-            echo " Running migration "          
-            if grep -q "has been executed successfully." ~/project/backend/migrations_file.txt
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
               echo "Migration succeeded for ${CIRCLE_WORKFLOW_ID:0:7}"
-              echo "1" >> ~/project/backend/migration-result.txt
+              echo "1" >> ~/project/backend/migration-results.txt
             else
               echo "Migration failed for ${CIRCLE_WORKFLOW_ID:0:7}:"
-              cat ~/project/backend/migrations_file.txt
-              echo "fail" >> ~/project/backend/migration-result.txt
+              cat ~/project/backend/migrations_dump.txt
+              echo "fail" >> ~/project/backend/migration-results.txt
             fi
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/backend/migration-result.txt
-      # Here's where you will add some code to rollback on failure
-      #- destroy-environment
+            - project/backend/migration-results.txt
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
