@@ -233,45 +233,38 @@ jobs:
 
   configure-infrastructure:
     docker:
+      # Docker image here that supports Ansible
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints: ["6e:45:f0:86:6e:0c:f0:51:dc:c4:be:9c:91:de:07:f3"]
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: ~/
-      # Checkout code from git checking
-      # Add ssh keys with fingerprint
-      # attach workspace
       - run:
-          name: Install tar, gzip, ansible, or awscli
+          name: Install dependencies
           command: |
+            # Your code here
             apk update
-            apk add tar gzip curl
-            # install the dependencies needed for your playbook
-            apk add --update ansible     
-            apk add --no-cache \
-                python3 \
-                py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install \
-                awscli \
-            && rm -rf /var/cache/apk/*
+            apk upgrade
+            apk add unzip
+            apk add curl
+            /usr/local/bin/python -m pip install --upgrade pip
       - run:
-          name: Install awscli
-          command: pip install awscli
+          name: Install ansible
+          command: |
+            apk add --update ansible
+            ansible --version
+      - run:
+          name: Install aws
+          command: |
+            pip install awscli --upgrade
+            aws --version
       - run:
           name: Configure server
           command: |
-            BACKEND_IP=$(curl -H "token:${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/backend_ip)
-            cd .circleci/ansible/
-            export ANSIBLE_HOST_KEY_CHECKING=False
-            echo ${BACKEND_IP}
             pwd
-            ls
-            echo ${BACKEND_IP} >> ./inventory.txt
-            cat ./inventory.txt
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
         # Here's where you will add some code to rollback on failure
       - destroy-environment
