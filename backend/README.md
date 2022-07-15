@@ -1,3 +1,6 @@
+
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mrsunilmehta/udapeople-sunilmehta-project-3/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mrsunilmehta/udapeople-sunilmehta-project-3/tree/master)
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
