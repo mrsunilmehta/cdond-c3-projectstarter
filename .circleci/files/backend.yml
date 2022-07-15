@@ -3,7 +3,7 @@ Description: >
 
 Parameters:
   ID:
-    Description: Unique identifier.
+    Description: Unique identifier
     Type: String
 
 Resources:
@@ -11,7 +11,7 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: !Sub UdaPeople-${ID}
-      GroupDescription: Allow port 22, 3030, 5432, 9090.9100 and 9193.
+      GroupDescription: Allow port 22, 3030, 5432, 9090,9100 and 9193.
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
@@ -45,8 +45,6 @@ Resources:
       SecurityGroups:
         - Ref: InstanceSecurityGroup
       KeyName: sunilproject3 # If you use another key pair name, you should change this value to match.
-      # If this ami id is not available for you, you can find another (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
-      # Ubuntu 18 or higher works fine
       ImageId: ami-0d73480446600f555
       Tags:
         - Key: Name

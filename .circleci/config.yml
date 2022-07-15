@@ -401,19 +401,17 @@ jobs:
           name: Install node
           command: |
             apk add --update nodejs nodejs-npm
-            node --version
             npm --version
+            node --version
       - run:
           name: Install ansible
           command: |
             # your code here
             apk add --update ansible
-            ansible --version
       - run:
           name: Install aws
           command: |
             pip install awscli --upgrade
-            aws --version
       - run:
           name: Env File
           command: |
@@ -441,13 +439,12 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             pwd
             ls
-            echo "mv artifac to ansibble -------"
+            echo "move artifac to ansibble -------"
             mv artifact.tar.gz .circleci/ansible/
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-       #Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
