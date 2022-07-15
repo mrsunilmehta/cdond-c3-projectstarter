@@ -508,17 +508,11 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Install tar, gzip, pip and awscli
+          name: Install dependencies
           command: |
-            apk update
-            apk add tar gzip
-            apk add --no-cache \
-                python3 \
-                py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install \
-                awscli \
-            && rm -rf /var/cache/apk/*
+            # your code here
+            sudo apt-get install -y curl tar gzip
+            pip3 install awscli
       - run:
           name: Update cloudfront distribution
           command: |
