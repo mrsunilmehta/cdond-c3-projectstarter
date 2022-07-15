@@ -92,7 +92,7 @@
     pm2 start npm --name backend -- run start
 
 - name: start pm2 for dist/main.js
-  become: false
+  become: no
   shell: pm2 start main.js
   args:
     chdir: /home/ubuntu/backend/dist

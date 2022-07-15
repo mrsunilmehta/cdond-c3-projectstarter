@@ -179,7 +179,6 @@ jobs:
             yum -y install gzip
       - run:
           name: Ensure back-end infrastructure exists
-          #  npm install
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
@@ -194,21 +193,19 @@ jobs:
               --tags project=udapeople \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-
-      - run:
-          name: Add url to kvdb
-          command: |
-            WEBSITEURL=$(aws cloudformation describe-stacks \
-              --region ${AWS_DEFAULT_REGION} \
-              --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
-              --query 'Stacks[0].Outputs[?'OutputKey'].OutputValue' \
-              --output text)
+      #- run:
+          #name: Add url to kvdb
+          #command: |
+           # WEBSITEURL=$(aws cloudformation describe-stacks \
+            #  --region ${AWS_DEFAULT_REGION} \
+            # --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
+            # --query 'Stacks[0].Outputs[?'OutputKey'].OutputValue' \
+            #  --output text)
               
-            echo ${WEBSITEURL}
+            #echo ${WEBSITEURL}
 
-            curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID:0:7}" \
-            --request PUT --data "${WEBSITEURL}" https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/
-
+            #curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID:0:7}" \
+            #--request PUT --data "${WEBSITEURL}" https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -220,9 +217,6 @@ jobs:
               cat .circleci/ansible/inventory.txt
               
             echo ${BACKEND_IP}
-
-            curl -H "Content-Type: text/plain" -H "token:${CIRCLE_WORKFLOW_ID:0:7}" \
-            --request PUT --data "${BACKEND_IP}" https://kvdb.io/GV8aqQ9ituUoCqcQp41Kxo/
       - persist_to_workspace:
           root: ~/
           paths:
