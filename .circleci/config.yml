@@ -170,20 +170,10 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      # Docker image here that supports AWS CLI
       - image: amazon/aws-cli
     steps:
-      # Checkout code from git
       - checkout
       - run: yum -y install tar gzip
-      - run: 
-          name: Get Previous Workflow ID
-          command: |
-              export OldWorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --region ${AWS_DEFAULT_REGION} --no-paginate --output text) >> .circleci/ansible/prevworkflow.txt
-              echo "prevworkflow  ->->->->->    $OldWorkflowID"             
-              cat ~/project/.circleci/ansible/prevworkflow.txt                   
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -206,20 +196,18 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             # Your code here
+            #echo [web] > inventory.txt
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text >> .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: ~/project/.circleci/ansible
+          root: ~/
           paths:
-            - .          
-      - run:
-          name: print inventory file
-          command: |
-            cat ~/project/.circleci/ansible/inventory.txt
-            cat ~/project/.circleci/ansible/prevworkflow.txt            
+            - project/.circleci/ansible/inventory.txt
       - destroy-environment
+
+
 
   configure-infrastructure:
     docker:
@@ -509,12 +497,12 @@ jobs:
             #your code here
             export OldWorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --region ${AWS_DEFAULT_REGION} --no-paginate --output text)
+              --no-paginate --output text)
             echo $OldWorkflowID >> ~/OldWorkflowID.txt
             cat ~/OldWorkflowID.txt
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
-            --stack-name InitialStack --region ${AWS_DEFAULT_REGION} \
+            --stack-name InitialStack \
             --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
             echo OldWorkflowID: "${OldWorkflowID}"
@@ -524,7 +512,8 @@ jobs:
           paths:
             - OldWorkflowID.txt
       # Here's where you will add some code to rollback on failure
-      - destroy-environment
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
@@ -532,31 +521,42 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
+      - checkout
       - run:
           name: Install dependencies
           command: |
-            yum install -y tar gzip
+            yum -y install tar gzip
       - attach_workspace:
-          at: ~/project/.circleci/ansible
+          at: ~/
       - run:
-          name: Get old stack workflow id and delete them
+          name: Get old stack workflow id
           command: |
-            cat ~/project/.circleci/ansible/prevworkflow.txt
-            export OldWorkflowID=$(tail -n 1 ~/project/.circleci/ansible/prevworkflow.txt)
-            export OldWorkflowID="${OldWorkflowID}"
+            # get oldworkflow
+            cat ~/OldWorkflowID.txt
+            OldWorkflowID=$(cat ~/OldWorkflowID.txt)
+            echo OldWorkflowID: "${OldWorkflowID}"
+            export OldWorkflowID=$(aws cloudformation \
+                    list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+                    --no-paginate --output text)
             echo OldWorkflowID: "${OldWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
+            # Fetch the stack names
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
                     --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
-      
+      - run:
+          name: Remove old stacks and files
+          command: |
+            cat ~/OldWorkflowID.txt
+            OldWorkflowID=$(cat ~/OldWorkflowID.txt)
+            echo OldWorkflowID: "${OldWorkflowID}"
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
-              aws s3 rm s3://udapeople-${OldWorkflowID} --recursive
-              aws cloudformation delete-stack --stack-name UdaPeople-frontend-${OldWorkflowID} --region ${AWS_DEFAULT_REGION}
-              aws cloudformation delete-stack --stack-name UdaPeople-backend-${OldWorkflowID} --region ${AWS_DEFAULT_REGION}
+               echo "Deleting S3 bucket and front and backend stack-"
+              #aws s3 rb "s3://${OldWorkflowID}" --force
+              #aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID:10:7}"
+              #aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID:10:7}"
             fi
-
 workflows:
   default:
     jobs:
