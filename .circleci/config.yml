@@ -395,24 +395,26 @@ jobs:
           command: |
             # your code here
             apk add --update ansible
+            ansible --version            
       - run:
           name: Install aws
           command: |
             pip install awscli --upgrade
+            aws --version            
       - run:
           name: Env File
           command: |
-            echo VERSION=1 >> backend/.env
-            echo TYPEORM_CONNECTION=postgres >> backend/.env
-            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> backend/.env
-            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> backend/.env
-            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> backend/.env
-            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
-            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
-            cat backend/.env
+              echo VERSION=1 >> backend/.env
+              echo TYPEORM_CONNECTION=postgres >> backend/.env
+              echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> backend/.env
+              echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> backend/.env
+              echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> backend/.env
+              echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+              echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+              echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+              echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+              echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
+              cat backend/.env
       - run:
           name: Deploy backend
           command: |
@@ -426,12 +428,13 @@ jobs:
             tar -C backend -czvf artifact.tar.gz .
             pwd
             ls
-            echo "move artifac to ansibble -------"
+            echo "mv artifac to ansibble -------"
             mv artifact.tar.gz .circleci/ansible/
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+      #Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"

@@ -1,20 +1,55 @@
----
-- name: "Upgrade packages."
-  become: true
-  apt:
-    upgrade: "yes"
+# - name: "upgrade packages."
+#   become: true
+#   apt:
+#     upgrade: "yes"
 
-- name: "Install dependencies."
-  become: true
-  apt:
-    name: ["nodejs", "npm"]
-    state: latest
-    update_cache: yes
+# - name: "install dependencies."
+#   become: true
+#   apt:
+#     name: ["nodejs", "npm"]
+#     update_cache: yes
 
-- name: "Install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
+# - name: "Add nodejs apt key"
+#   become: true
+#   apt_key:
+#     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+#     state: present
+
+# - name: "Add nodejs 13.x ppa for apt repo"
+#   become: true
+#   apt_repository:
+#     repo: deb https://deb.nodesource.com/node_13.x bionic main
+#     update_cache: yes
+
+# - name: "Install nodejs"
+#   become: true
+#   apt:
+#     update_cache: yes
+#     name: nodejs
+#     state: present
+
+# - name: Download zsh installer
+#   get_url:
+#     url: https://deb.nodesource.com/setup_13.x
+#     dest: /tmp/setup_13.sh
+
+# - name: Execute the setup_13.sh
+#   become: true
+#   become_user: root
+#   shell: chmod 777 setup_13.sh & bash setup_13.sh
+#   args:
+#     chdir: /tmp/
+
+# - name: "upgrade"
+#   become: true
+#   command: apt-get install -y nodejs
+#   args:
+#     chdir: /root
+
+# - name: "install pm2"
+#   become: yes
+#   npm:
+#     name: pm2
+#     global: yes
+#     production: yes
+#     state: present
