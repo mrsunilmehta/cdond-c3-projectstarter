@@ -86,6 +86,7 @@
     npm run prestart:prod
 
 - name: Start PM2
+  become: true
   shell: |
     cd /home/ubuntu/backend
     pm2 stop default

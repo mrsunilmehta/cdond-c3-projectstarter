@@ -90,6 +90,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -106,6 +107,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -119,6 +121,7 @@ jobs:
             cd frontend
             npm install
             npm run test
+            
   test-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -435,6 +438,18 @@ jobs:
             sudo apt install -y awscli
             aws --version
       - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.us-east-1.amazonaws.com"
+              echo ${URL}
+              if curl -s ${URL} | grep "Welcome"
+              then
+                exit 0
+              else
+                exit 1
+              fi
+      - run:
           name: Backend Smoke Test
           command: |
             # your code here
@@ -445,25 +460,13 @@ jobs:
               export API_URL="http://${BACKEND_IP}:3030"
               echo "API_URL = ${API_URL}"
               sleep 60
+              curl "${API_URL}/api/status"              
               if curl "${API_URL}/api/status" | grep "ok"
               then
                 echo SUCCESS
                 exit 0
               else
-                echo FAIL
-                exit 1
-              fi
-      - run:
-          name: Frontend smoke test.
-          command: |
-            # your code here
-            #URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com/#/employees"
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.us-east-1.amazonaws.com"
-              echo ${URL}
-              if curl -s ${URL} | grep "Welcome"
-              then
-                exit 0
-              else
+                echo UNSUCCESSFUL
                 exit 1
               fi
       # Here's where you will add some code to rollback on failure
