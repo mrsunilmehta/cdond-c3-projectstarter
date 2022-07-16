@@ -182,7 +182,8 @@ jobs:
               export OldWorkflowID=$(aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --region ${AWS_DEFAULT_REGION} --no-paginate --output text) >> .circleci/ansible/prevworkflow.txt
-              echo $OldWorkflowID >> ~/OldWorkflowID.txt              
+              echo "prevworkflow  ->->->->->    $OldWorkflowID"             
+              cat ~/project/.circleci/ansible/prevworkflow.txt                   
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -210,10 +211,9 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text >> .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: ~/
+          root: ~/project/.circleci/ansible
           paths:
-            - project/.circleci/ansible/inventory.txt
-            - project/.circleci/ansible/prevworkflow.txt            
+            - .          
       - run:
           name: print inventory file
           command: |
