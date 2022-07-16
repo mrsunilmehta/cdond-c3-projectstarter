@@ -208,7 +208,6 @@ jobs:
       - destroy-environment
 
 
-
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
@@ -512,8 +511,7 @@ jobs:
           paths:
             - OldWorkflowID.txt
       # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy-environment
       - revert-migrations:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
