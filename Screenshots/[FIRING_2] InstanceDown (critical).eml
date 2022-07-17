@@ -1,0 +1,284 @@
+Delivered-To: mehta.suneel@gmail.com
+Received: by 2002:ab2:24de:0:b0:14c:184b:cd0f with SMTP id r30csp259089lqe;
+        Sat, 16 Jul 2022 22:17:53 -0700 (PDT)
+X-Received: by 2002:a05:6214:212a:b0:473:9ba:2829 with SMTP id r10-20020a056214212a00b0047309ba2829mr17399813qvc.1.1658035073288;
+        Sat, 16 Jul 2022 22:17:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1658035073; cv=none;
+        d=google.com; s=arc-20160816;
+        b=nE/da+e3EyKf2fXzAUzCgY8WHcReg6AkDQiq99uWykkLG9aEbY3QkAJFQ7aM7W47de
+         mPhiuAYev/pWvNUcuZ9+GYB3ghuA1GMav16xBa/IqgonoKRFt26QmpTtY5UCuVa8jWuc
+         dpcQjPZV2akDiKJZbvOJm0ecjgK56hEmjOBe99crs+10zaKMpFo/pVi702WdjyhpZdUd
+         22krIfFAZV3HyubBl8CUy2NfdEk9mzlBzPInWDfXjm6wiCcAiCZmbsKsyZY5uKUDgx2r
+         DpHwOgiCj5Kp9hb2bARqTi2GHz60Cp5GA83MiHhtVjC9oHA69Dcpu13M9IAhoue2YOgK
+         r0qA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=mime-version:date:message-id:to:subject:from:dkim-signature;
+        bh=RlAM6i+phaKzjwtuR5QSJVPq8rReI2I76gA3Tudsi50=;
+        b=KytUyYVtWQ001YdWa7P/J3Y6HuWf7oDd3IZMjnEwXDSHFv9CTb+uL/T4zazg6qRUO6
+         JwoXCFV6uHxfg8Owate2hZOdG7u1xl9ibuef46x1IrZSDsREG7hcQ8OH+J25vahR5paI
+         6CfMGW/zn9PyEYZe4kvl+1rC31mdR/WD+sAs0VJj9mjZWpEw5MgQNlP6adb5YH0ZFoeR
+         Oul7QkCcwOVUlHLllUn7fUZ/DrWxV8zZGmpVX5uJT5l0Ryr40iGnyDCqnQvC7L6KnkVs
+         /X4Y87Tba3RI6juy1U0EP28vvPcsSotmtbs4nFxPoMopOzT9dIFwivmkbZ7ktMbAn6qs
+         Tg+Q==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20210112 header.b=OwFU2oj0;
+       spf=pass (google.com: domain of suneel.mehta@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=suneel.mehta@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+Return-Path: <suneel.mehta@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id g8-20020ac87748000000b0031d2869db5dsor6242937qtu.11.2022.07.16.22.17.53
+        for <mehta.suneel@gmail.com>
+        (Google Transport Security);
+        Sat, 16 Jul 2022 22:17:53 -0700 (PDT)
+Received-SPF: pass (google.com: domain of suneel.mehta@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20210112 header.b=OwFU2oj0;
+       spf=pass (google.com: domain of suneel.mehta@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=suneel.mehta@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:subject:to:message-id:date:mime-version;
+        bh=RlAM6i+phaKzjwtuR5QSJVPq8rReI2I76gA3Tudsi50=;
+        b=OwFU2oj0t3sa6a9ZidW8geMR/Uf3zNo7/Y2gKGlsTpGA9IWCF/I7Zd1HMzTDdP3Tj7
+         x42IQq4oLI5AfNgGTXV/4C06jdXwgr0CruQgjhG4nhVZkDOVSpn0hxl/ojjyIlt8tjmx
+         dU/lKPUODpZJOn3/XsmqrFzk1uYoAUW1KpzzKuJyRI7Sv4uN4XyLiUe6ZkDZltz2AyPd
+         xNWrab8Iy6KhNTgUgIrmeJiblDmcxt5ZufElXi//37cNQs6o5AJYMv92eIjMF93j7xS9
+         jyptuq2ARa6YXaJKok7wBvLreMyatZoJZDQtAbEW4A05q78Is1DNMr0bRrQm9Ur/YZb4
+         AQ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:subject:to:message-id:date:mime-version;
+        bh=RlAM6i+phaKzjwtuR5QSJVPq8rReI2I76gA3Tudsi50=;
+        b=faoc3t5jQgt2QZrwElxnBg2HNCbWzwI8MVHIUFlcHPWEvxu2vUFmMqU45FD6vndWWE
+         Yr9230pSWgK4t3qqVNRJK4H1bWKpgLnDKOkkc57qZzKVlQQQ9EXHRr//eZYbAOTGxlzi
+         UhmE69Uo7rU2+342dCmmUdWNlSTs5CioMbS5JeohzDVXO9vA1VQPDVz+ysQmz30Ut+Rr
+         4oBw1xv7ntSUvHvXWN+NLSPjLtCeSEduqGCyeXPpgXrhRsk+diDLrIZdGfG2Ds+EyYjp
+         1Sg4EDo50WT7M7Dn02xV8p4CEgHjuZ1szsj3QDDjy4T7qgzOI+XA1k4CZtsM9D5gDyMX
+         xsGA==
+X-Gm-Message-State: AJIora+QWtEgNWYqeH4D72ua1HlPOIfPh5wkDPQOjrowGYiT1UkW4k8K
+	gPr7RURLBtqNKqsJOEbTDsrEkE5cEFt/Ee70
+X-Google-Smtp-Source: AGRyM1vd4DBbooWYhzdC7+TzjHLV9l4cQ8bhAI1yfam8UaCQy1Zsqao6L6ZdJGAaKeAJ+UxwKWAo1Q==
+X-Received: by 2002:a05:622a:551:b0:31e:cdf0:4acc with SMTP id m17-20020a05622a055100b0031ecdf04accmr15536770qtx.194.1658035072442;
+        Sat, 16 Jul 2022 22:17:52 -0700 (PDT)
+Return-Path: <suneel.mehta@gmail.com>
+Received: from localhost (ec2-54-210-131-62.compute-1.amazonaws.com. [54.210.131.62])
+        by smtp.gmail.com with ESMTPSA id f22-20020ac84656000000b0031b18d29864sm3798213qto.64.2022.07.16.22.17.51
+        for <mehta.suneel@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Jul 2022 22:17:51 -0700 (PDT)
+From: suneel.mehta@gmail.com
+Subject: [FIRING:2] InstanceDown (critical)
+To: mehta.suneel@gmail.com
+Message-Id: <1658035071644385911.12019016096189163774@ip-172-31-95-225>
+Date: Sun, 17 Jul 2022 05:17:51 +0000
+Content-Type: multipart/alternative;  boundary=2ae7b6e45589b17cfd5853b5719947beb66794512b1fd73ac6811d64af99
+MIME-Version: 1.0
+
+--2ae7b6e45589b17cfd5853b5719947beb66794512b1fd73ac6811d64af99
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=UTF-8
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns=3D"http://www.w3.org/199=
+9/xhtml" style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-ser=
+if; box-sizing: border-box; font-size: 14px; margin: 0;">
+<head style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;=
+ box-sizing: border-box; font-size: 14px; margin: 0;">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width" style=3D"font-fami=
+ly: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box;=
+ font-size: 14px; margin: 0;" />
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8" st=
+yle=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-siz=
+ing: border-box; font-size: 14px; margin: 0;" />
+<title style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif=
+; box-sizing: border-box; font-size: 14px; margin: 0;">[FIRING:2] InstanceD=
+own (critical)</title>
+
+</head>
+
+<body itemscope=3D"" itemtype=3D"http://schema.org/EmailMessage" style=3D"f=
+ont-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bor=
+der-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text=
+-size-adjust: none; height: 100%; line-height: 1.6em; width: 100% !importan=
+t; background-color: #f6f6f6; margin: 0; padding: 0;" bgcolor=3D"#f6f6f6">
+
+<table style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif=
+; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #=
+f6f6f6; margin: 0;" bgcolor=3D"#f6f6f6">
+  <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;=
+ box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-seri=
+f; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;=
+" valign=3D"top"></td>
+    <td width=3D"600" style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; display: block !important; max-width: 600px !important; clear: both !im=
+portant; width: 100% !important; margin: 0 auto; padding: 0;" valign=3D"top=
+">
+      <div style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-s=
+erif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: b=
+lock; margin: 0 auto; padding: 0;">
+        <table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" style=3D"=
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: bo=
+rder-box; font-size: 14px; border-radius: 3px; background-color: #fff; marg=
+in: 0; border: 1px solid #e9e9e9;" bgcolor=3D"#fff">
+          <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+            <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; co=
+lor: #fff; font-weight: 500; text-align: center; border-radius: 3px 3px 0 0=
+; background-color: #E6522C; margin: 0; padding: 20px;" align=3D"center" bg=
+color=3D"#E6522C" valign=3D"top">
+              2 alerts for=20
+                alertname=3DInstanceDown
+             =20
+            </td>
+          </tr>
+          <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+            <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; ma=
+rgin: 0; padding: 10px;" valign=3D"top">
+              <table width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizi=
+ng: border-box; font-size: 14px; margin: 0;">
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <a href=3D"http://ip-172-31-95-225:9093/#/alerts?receiv=
+er=3Demail" style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-=
+serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoratio=
+n: none; line-height: 2em; font-weight: bold; text-align: center; cursor: p=
+ointer; display: inline-block; border-radius: 5px; text-transform: capitali=
+ze; background-color: #348eda; margin: 0; border-color: #348eda; border-sty=
+le: solid; border-width: 10px 20px;">View in AlertManager</a>
+                  </td>
+                </tr>
+               =20
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>[2] Firing</strong>
+                  </td>
+                </tr>
+               =20
+               =20
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Labels</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    alertname =3D InstanceDown<br style=3D"font-family: 'He=
+lvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-s=
+ize: 14px; margin: 0;" />instance =3D 172.31.85.114:9100<br style=3D"font-f=
+amily: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-b=
+ox; font-size: 14px; margin: 0;" />job =3D node<br style=3D"font-family: 'H=
+elvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-=
+size: 14px; margin: 0;" />severity =3D critical<br style=3D"font-family: 'H=
+elvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-=
+size: 14px; margin: 0;" />
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Annotations</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica,=
+ Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    description =3D  of job  has been down for more than 3 =
+minutes.<br style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-=
+serif; box-sizing: border-box; font-size: 14px; margin: 0;" />summary =3D I=
+nstance  is down<br style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    <a href=3D"http://ip-172-31-95-225:9090/graph?g0.expr=
+=3Dup&#43;%3D%3D&#43;0&amp;g0.tab=3D1" style=3D"font-family: 'Helvetica Neu=
+e', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; =
+color: #348eda; text-decoration: underline; margin: 0;">Source</a><br style=
+=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing=
+: border-box; font-size: 14px; margin: 0;" />
+                  </td>
+                </tr>
+               =20
+                <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                  <td style=3D"font-family: 'Helvetica Neue', Helvetica, Ar=
+ial, sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: t=
+op; margin: 0; padding: 0 0 20px;" valign=3D"top">
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Labels</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    alertname =3D InstanceDown<br style=3D"font-family: 'He=
+lvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-s=
+ize: 14px; margin: 0;" />instance =3D ec2-54-197-196-151.compute-1.amazonaw=
+s.com:9100<br style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />job =3D nod=
+e_exporter<br style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, san=
+s-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />severity =
+=3D critical<br style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    <strong style=3D"font-family: 'Helvetica Neue', Helveti=
+ca, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"=
+>Annotations</strong><br style=3D"font-family: 'Helvetica Neue', Helvetica,=
+ Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    description =3D  of job  has been down for more than 3 =
+minutes.<br style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-=
+serif; box-sizing: border-box; font-size: 14px; margin: 0;" />summary =3D I=
+nstance  is down<br style=3D"font-family: 'Helvetica Neue', Helvetica, Aria=
+l, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" />
+                    <a href=3D"http://ip-172-31-95-225:9090/graph?g0.expr=
+=3Dup&#43;%3D%3D&#43;0&amp;g0.tab=3D1" style=3D"font-family: 'Helvetica Neu=
+e', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; =
+color: #348eda; text-decoration: underline; margin: 0;">Source</a><br style=
+=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing=
+: border-box; font-size: 14px; margin: 0;" />
+                  </td>
+                </tr>
+               =20
+
+               =20
+               =20
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <div style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans=
+-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; =
+color: #999; margin: 0; padding: 20px;">
+          <table width=3D"100%" style=3D"font-family: 'Helvetica Neue', Hel=
+vetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin:=
+ 0;">
+            <tr style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, s=
+ans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+              <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial,=
+ sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; =
+text-align: center; color: #999; margin: 0; padding: 0 0 20px;" align=3D"ce=
+nter" valign=3D"top"><a href=3D"http://ip-172-31-95-225:9093" style=3D"font=
+-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border=
+-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;"=
+>Sent by AlertManager</a></td>
+            </tr>
+          </table>
+        </div></div>
+    </td>
+    <td style=3D"font-family: 'Helvetica Neue', Helvetica, Arial, sans-seri=
+f; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;=
+" valign=3D"top"></td>
+  </tr>
+</table>
+
+</body>
+</html>
+
+
+--2ae7b6e45589b17cfd5853b5719947beb66794512b1fd73ac6811d64af99--
